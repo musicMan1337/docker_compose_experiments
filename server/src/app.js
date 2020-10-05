@@ -20,14 +20,14 @@ app.use(cors(corsOrigin));
 app.use(helmet());
 
 const getAll = (db) => {
-  return db('test').select('*')
-}
+  return db.from('test').select('*');
+};
 
-app.use(express.json())
+app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send(getAll(req.app.get('db')))
-  // res.send('Express boilerplate initialized!');
+  res.json(getAll(req.app.get('db')))
+  // res.json({ message: 'Express boilerplate initialized!' });
 });
 
 /*
