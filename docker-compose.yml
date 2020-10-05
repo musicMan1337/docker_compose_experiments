@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  db:
+    container_name: postgres
+    image: postgres:9.6-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pg:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  client:
+    container_name: react-app
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    restart: on-failure
+    ports:
+      - 3000:3000
+    stdin_open: true
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+
+  server:
+    container_name: express-api
+    depends_on:
+      - db
+    links:
+      - db
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    restart: on-failure
+    ports:
+      - 8000:8000
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
+volumes:
+  pg:

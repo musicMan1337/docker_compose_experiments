@@ -1,0 +1,10 @@
+build
+
+.git
+.gitignore
+.gitattributes
+
+.editorconfig
+.prettierrc.yml
+
+vercel.json
